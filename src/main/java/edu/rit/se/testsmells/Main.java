@@ -56,7 +56,7 @@ public class Main {
             columnValues = new ArrayList<>();
             columnValues.add(0,testFiles.get(i).getAppName());
             columnValues.add(1,testFiles.get(i).getTagName());
-            columnValues.add(2,testFiles.get(i).getFilePath());
+            columnValues.add(2,testFiles.get(i).getUnixFilePath());
             columnValues.add(3,testFiles.get(i).getProductionFilePath());
             columnValues.add(4,testFiles.get(i).getRelativeTestFilePath());
             columnValues.add(5,testFiles.get(i).getRelativeProductionFilePath());

@@ -2,15 +2,23 @@ package edu.rit.se.testsmells;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
+import java.util.regex.Pattern;
+
 public class TestFile {
     private String filePath, productionFilePath;
-    String[] data;
+    private String[] data;
+
+    public TestFile(String filePath) {
+        this.filePath = filePath;
+        data = splitFilepath(filePath);
+    }
 
     public String getFileName() {
         return data[data.length - 1];
     }
 
-    public String getFilePath() {
+    public String getUnixFilePath() {
         return filePath;
     }
 
@@ -23,11 +31,7 @@ public class TestFile {
     }
 
     public String getProjectRootFolder() {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < 5; i++) {
-            stringBuilder.append(data[i] + "\\");
-        }
-        return stringBuilder.toString();
+        return get5LevelsPath(data).toString();
     }
 
     public String getAppName() {
@@ -38,32 +42,31 @@ public class TestFile {
         return data[4];
     }
 
-    public TestFile(String filePath) {
-        this.filePath = filePath;
-        data = filePath.split("\\\\");
+    public String getRelativeTestFilePath() {
+        return getUnixFilePath(filePath);
     }
 
-    public String getRelativeTestFilePath(){
-        String[] splitString = filePath.split("\\\\");
+    public String getRelativeProductionFilePath() {
+        if (!StringUtils.isEmpty(productionFilePath)) {
+            return getUnixFilePath(productionFilePath);
+        }
+        return "";
+    }
+
+    private String getUnixFilePath(String filePath) {
+        String[] splitString = splitFilepath(filePath);
+        return filePath.substring(get5LevelsPath(splitString).toString().length()).replace(File.separator, "/");
+    }
+
+    private StringBuilder get5LevelsPath(String[] splitString) {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < 5; i++) {
-            stringBuilder.append(splitString[i] + "\\");
+            stringBuilder.append(splitString[i]).append(File.separator);
         }
-        return filePath.substring(stringBuilder.toString().length()).replace("\\","/");
+        return stringBuilder;
     }
 
-    public String getRelativeProductionFilePath(){
-        if (!StringUtils.isEmpty(productionFilePath)){
-            String[] splitString = productionFilePath.split("\\\\");
-            StringBuilder stringBuilder = new StringBuilder();
-            for (int i = 0; i < 5; i++) {
-                stringBuilder.append(splitString[i] + "\\");
-            }
-            return productionFilePath.substring(stringBuilder.toString().length()).replace("\\","/");
-        }
-        else{
-            return "";
-        }
-
+    public String[] splitFilepath(String filePath) {
+        return filePath.split(Pattern.quote(File.separator));
     }
 }

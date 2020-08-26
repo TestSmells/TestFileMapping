@@ -31,7 +31,7 @@ public class MappingDetector {
         int index = testFile.getFileName().toLowerCase().lastIndexOf("test");
         if (index == 0) {
             //the name of the test file starts with the name 'test'
-            productionFileName = testFile.getFileName().substring(4, testFile.getFileName().length());
+            productionFileName = testFile.getFileName().substring(4);
         } else {
             //the name of the test file ends with the name 'test'
             productionFileName = testFile.getFileName().substring(0, testFile.getFileName().toLowerCase().lastIndexOf("test")) + ".java";
@@ -76,9 +76,7 @@ public class MappingDetector {
 
     public class FindJavaTestFilesVisitor extends SimpleFileVisitor<Path> {
         @Override
-        public FileVisitResult visitFile(Path file,
-                                         BasicFileAttributes attrs)
-                throws IOException {
+        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
             if (file.getFileName().toString().toLowerCase().equals(productionFileName.toLowerCase())) {
                 productionFilePath = file.toAbsolutePath().toString();
                 return FileVisitResult.TERMINATE;
