@@ -1,17 +1,21 @@
 package edu.rit.se.testsmells;
 
-import org.apache.commons.lang3.StringUtils;
-
 public class TestFile {
-    private String filePath, productionFilePath;
     String[] data;
+    private String testFilePath, productionFilePath, srcDirectory;
+
+    public TestFile(String srcDirectory, String testFilePath) {
+        this.testFilePath = testFilePath;
+        this.srcDirectory = srcDirectory;
+        data = this.testFilePath.split("\\\\");
+    }
 
     public String getFileName() {
         return data[data.length - 1];
     }
 
-    public String getFilePath() {
-        return filePath;
+    public String getTestFilePath() {
+        return testFilePath;
     }
 
     public String getProductionFilePath() {
@@ -23,47 +27,7 @@ public class TestFile {
     }
 
     public String getProjectRootFolder() {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < 5; i++) {
-            stringBuilder.append(data[i] + "\\");
-        }
-        return stringBuilder.toString();
+        return srcDirectory;
     }
 
-    public String getAppName() {
-        return data[3];
-    }
-
-    public String getTagName() {
-        return data[4];
-    }
-
-    public TestFile(String filePath) {
-        this.filePath = filePath;
-        data = filePath.split("\\\\");
-    }
-
-    public String getRelativeTestFilePath(){
-        String[] splitString = filePath.split("\\\\");
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < 5; i++) {
-            stringBuilder.append(splitString[i] + "\\");
-        }
-        return filePath.substring(stringBuilder.toString().length()).replace("\\","/");
-    }
-
-    public String getRelativeProductionFilePath(){
-        if (!StringUtils.isEmpty(productionFilePath)){
-            String[] splitString = productionFilePath.split("\\\\");
-            StringBuilder stringBuilder = new StringBuilder();
-            for (int i = 0; i < 5; i++) {
-                stringBuilder.append(splitString[i] + "\\");
-            }
-            return productionFilePath.substring(stringBuilder.toString().length()).replace("\\","/");
-        }
-        else{
-            return "";
-        }
-
-    }
 }

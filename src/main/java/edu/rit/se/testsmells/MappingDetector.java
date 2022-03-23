@@ -25,8 +25,8 @@ public class MappingDetector {
 
 
     public TestFile detectMapping(String testFilePath) throws IOException {
-
-        testFile = new TestFile(testFilePath);
+        String[] data = testFilePath.split(",");
+        testFile = new TestFile(data[0], data[1]);
 
         int index = testFile.getFileName().toLowerCase().lastIndexOf("test");
         if (index == 0) {
